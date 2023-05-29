@@ -2,6 +2,11 @@
 By receiving the input image, Grain-Selector is able to analyze the shape with indices and is able to output the user's desired index as an image. The results of this software can be imported into [RPMG2D](https://github.com/yasharsajadi/RPMG2D) and [MRPMG2D](https://github.com/yasharsajadi/MRPMG2D) software.
 Let's install it and work with it:
 
+<p align="center">
+  <img src="https://github.com/yasharsajadi/Grain-Selector/blob/master/A%20Sample.png" width="800">
+</p>
+
+
 ## Installation
 1. You need to install [Octave GNU](https://octave.org/download) with version 7.3 and above.
 	Hint: If you want exactly version 7.3 [Windows](https://ftp.gnu.org/gnu/octave/windows/) or [Linux](https://ftp.gnu.org/gnu/octave/)
