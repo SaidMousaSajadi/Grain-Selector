@@ -29,4 +29,4 @@ Create Shortcut From `MyApplication.sh` , and use it where you want.
 Not yet completed.
 
 ## Tutorials
-[YouTube Video](https://www.youtube.com/watch?v=ijVbrcyl3nM)
+[Youtube Video](https://www.youtube.com/watch?v=ijVbrcyl3nM)
