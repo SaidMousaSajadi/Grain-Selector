@@ -26,7 +26,7 @@ In Linux
 Create Shortcut From `MyApplication.sh` , and use it where you want.
 
 ## Manual
-Not yet completed.
+[PDF](https://github.com/yasharsajadi/Grain-Selector/blob/master/GrainSelector/Manual.pdf)
 
 ## Tutorials
 [Youtube Video](https://www.youtube.com/watch?v=ijVbrcyl3nM)
