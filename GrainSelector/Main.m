@@ -22,6 +22,37 @@ function Processing(STR,obj)
       set(obj,'backgroundcolor',[0.785 1 0.785])
   end
 end
+%
+function RGB = IMG2RGB(IM,M)
+  if ~islogical(IM)
+    if isempty(M)
+      if ndims(IM) == 2
+        [IND , M] = gray2ind(IM) ;
+        RGB = ind2rgb(IND,M) ;
+      elseif ndims(IM) == 3 && size(IM,3) == 3
+        RGB = IM ;
+      end
+    else
+      RGB = ind2rgb(IM,M) ;
+    end
+  else
+    RGB = IM(:,:,1) ;
+  end
+end
+%
+function GRAY = RGB2GRAY(RGB)
+  if ~islogical(RGB)
+    GRAY = rgb2gray(RGB) ;
+    switch class(GRAY)
+      case {'uint8'}
+        GRAY = double(GRAY)/255 ;
+      case {'uint16'}
+        GRAY = double(GRAY)/65535 ;
+    end
+  else
+    GRAY = double(RGB) ;
+  end
+end
 %%%%%%%%%
 root.FlagIM = 0 ;
 root.FlagLabel = 0 ;
@@ -38,7 +69,8 @@ function Update_UI(obj,init = false)
         switch lower(NameSpl{1,end})
           case {'png','jpg','jpeg','tiff','tif'}
             [h.IM , h.Map]= imread([h.FilePath h.FileName]) ;
-            [h.IM_G , ~] = Image2Gray(h.IM,h.Map) ; % h.IM_G = double(rgb2gray(h.IM))/255 ;
+            h.IM = IMG2RGB(h.IM,h.Map) ;
+            h.IM_G = RGB2GRAY(h.IM) ; 
             axes(h.Ax_Hist);
             imhist(h.IM_G) ;
             axes(h.Ax);
@@ -48,7 +80,7 @@ function Update_UI(obj,init = false)
               imshow(h.IM(:,:,1)) ;
             end
             h.Base_axis = axis(h.Ax) ;
-            h.Cust_axis = axis(h.Ax) ;            
+            h.Cust_axis = axis(h.Ax) ;
             h.FlagIM = 1 ;
             guidata(gcf,h) % update handles
         end
