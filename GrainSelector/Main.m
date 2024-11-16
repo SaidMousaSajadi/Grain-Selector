@@ -2,6 +2,7 @@ close all ; clear all ; clc ;
 
 graphics_toolkit qt % or fltk(PLC/old) , qt(apps) , gnuplot(sites)
 pkg load image % images
+load MyIcon.mat
 ##pkg load statistics % pdist
 ##pkg load ltfat % normalize
 
@@ -72,7 +73,7 @@ function Update_UI(obj,init = false)
             h.IM = IMG2RGB(h.IM,h.Map) ;
             h.IM_G = RGB2GRAY(h.IM) ; 
             axes(h.Ax_Hist);
-            imhist(h.IM_G) ;
+            imhist(h.IM_G) ; set(h.Ax_Hist,'box','on') ;
             axes(h.Ax);
             if ~islogical(h.IM)
               imshow(h.IM,h.Map) ;
@@ -103,7 +104,7 @@ function Update_UI(obj,init = false)
     case {h.CustomZoom}
       axis(h.Cust_axis)
       zoom off
-    case {h.SetZoom}
+    case {h.SetCustomZoom}
       h.Cust_axis = axis(h.Ax) ;
       zoom off
       guidata(gcf,h) % update handles
@@ -163,7 +164,8 @@ function Update_UI(obj,init = false)
           Bi = h.Bound{Index,1} ;
           patch(Ax,Bi(:,2),Bi(:,1),'k')
           set(gca,'YDir','reverse') ; set(Ax,'XColor','none') ; set(Ax,'YColor','none')
-          axis equal
+          axis equal ; CurrentAxis = axis() ; 
+          axis([CurrentAxis(1) - abs(CurrentAxis(2)-CurrentAxis(1)), CurrentAxis(2) + abs(CurrentAxis(2)-CurrentAxis(1)), CurrentAxis(3) - abs(CurrentAxis(4)-CurrentAxis(3)), CurrentAxis(4) + abs(CurrentAxis(4)-CurrentAxis(3))]) ;
           F = getframe(Ax);
           Image = frame2im(F);
           imwrite(Image, [FilePath ,  FileName])
@@ -174,7 +176,11 @@ function Update_UI(obj,init = false)
 
     case {h.Bar}
       Processing('p',h.Process)
-      set(h.Text,'string',['GrayScale To Labeling: ' num2str(get(h.Bar,'value'))])
+      set(h.Edit,'string',[num2str(get(h.Bar,'value'))])
+      Processing('r',h.Process)
+    case {h.Edit}
+      Processing('p',h.Process)
+      set(h.Bar,'value',[str2num(get(h.Edit,'string'))])
       Processing('r',h.Process)
 
     case {h.Radio0}
@@ -192,10 +198,11 @@ function Update_UI(obj,init = false)
   end
 end
 
-root.Fig = figure("toolbar", "none",'uicontextmenu',[],'menubar','none','name',"Grain Selector",'NumberTitle','off','units','normalized',"Position", [2.1962e-03 6.2500e-02 9.9414e-01 8.6979e-01],"CloseRequestFcn",'exit') ;
+root.Fig = figure("toolbar", 'none','uicontextmenu',[],'menubar','none','name',"Grain Selector",'NumberTitle','off','units','normalized',"Position", [2.1962e-03 6.2500e-02 9.9414e-01 8.3579e-01],"CloseRequestFcn",'exit') ;
 root.F = uimenu("label", "&File", "accelerator", "f");
 root.E = uimenu("label", "&Edit", "accelerator", "e");
 root.H = uimenu("label", "&Help", "accelerator", "h");
+root.T = uitoolbar(root.Fig);
 
 # Subs
 root.Open = uimenu(root.F, "label", "&Open Image", "accelerator", "O", "callback", @Update_UI);
@@ -208,22 +215,24 @@ uimenu(root.H, "label", "&Documentation", "accelerator", "D","callback", "system
 uimenu(root.H, "label", "About Me", "accelerator", "","callback", "web('https://www.linkedin.com/in/seyed-mousa-sajadi-8284b1124/','-new')"); %
 
 # In Window
-root.P = uipanel(root.Fig,'units','normalized','Position',[0.01 0.91 0.20 0.07],'visible','on','backgroundcolor',get(root.Fig,'Color'));
-root.Text = uicontrol(root.P,'style','text','units','normalized','position',[0.1 0.55 0.80 0.4],'string','GrayScale To Labeling: 0.89','backgroundcolor',get(root.Fig,'Color'),'fontsize',9);
-root.Bar = uicontrol(root.P,'style','slider','units','normalized','position',[0.01 0.10 0.97 0.3],'sliderstep',[0.010000 0.100000],'min',0,'max',1,'Value',0.89,'callback',@Update_UI);
+root.P = uipanel(root.Fig,'units','normalized','Position',[0.645 0.58 0.35 0.41125],'visible','on','backgroundcolor',get(root.Fig,'Color'));
+root.Text = uicontrol(root.P,'style','text','units','normalized','position',[0.115 0.9 0.625 0.070],'string','GrayScale To Labeling:','backgroundcolor',get(root.Fig,'Color'),'fontsize',9);
+root.Edit = uicontrol(root.P,'style','edit','units','normalized','position',[0.575 0.9 0.15 0.070],'string','0.89','backgroundcolor',get(root.Fig,'Color'),'fontsize',9, 'callback',@Update_UI);
+root.Radio0 = uicontrol(root.P, "style", "radiobutton", "string","Dark" ,"units","normalized","position", [0.015 0.148 0.085 0.05],'fontsize',7,'backgroundcolor',get(root.Fig,"Color"),'value' , 0,'callback',@Update_UI);
+root.Radio1 = uicontrol(root.P, "style", "radiobutton", "string","Light","units","normalized","position", [0.900 0.148 0.085 0.05],'fontsize',7,'backgroundcolor',get(root.Fig,"Color"),'value' , 1,'callback',@Update_UI);
+root.Ax_Hist = axes(root.P,'units','normalized',"position", [0.115 0.15 0.75 0.70],'box','on','xtick',[],'ytick',[]);
+root.Bar = uicontrol(root.P,'style','slider','units','normalized','position',[0.077 0.05 0.825 0.070],'sliderstep',[0.0010000 0.100000],'min',0,'max',1,'Value',0.89,'callback',@Update_UI);
 
-root.Ax = axes(root.Fig,'units','normalized',"position", [0.01 0.0325 0.98 0.84],'box','on','xtick',[],'ytick',[]);
-root.Ax_Hist = axes(root.Fig,'units','normalized',"position", [0.32 0.91 0.20 0.07],'box','on','xtick',[],'ytick',[]);
-root.Radio0 = uicontrol (root.Fig, "style", "radiobutton", "string","Dark" ,"units","normalized","position", [0.23 0.90 0.04 0.05],'fontsize',7,'backgroundcolor',get(root.Fig,"Color"),'value' , 0,'callback',@Update_UI);
-root.Radio1 = uicontrol (root.Fig, "style", "radiobutton", "string","Light","units","normalized","position", [0.53 0.90 0.04 0.05],'fontsize',7,'backgroundcolor',get(root.Fig,"Color"),'value' , 1,'callback',@Update_UI);
+root.Ax = axes(root.Fig,'units','normalized',"position", [0.005 0.0325 0.633 0.955],'box','on','xtick',[],'ytick',[]);
 
-root.Home = uicontrol(root.Fig,"string", "🏠",'units','normalized','Position',[0.635 0.91 0.05 0.035],'fontsize',8,'callback',@Update_UI); %
-root.ZoomModeOn = uicontrol(root.Fig,"string", "🔎",'units','normalized','Position',[0.695 0.91 0.05 0.035],'fontsize',8,'callback',@Update_UI); %
-root.ZoomModeOff = uicontrol(root.Fig,"string", "🔎⛔",'units','normalized','Position',[0.755 0.91 0.05 0.035],'fontsize',8,'callback',@Update_UI); %
-root.ZoomIn = uicontrol(root.Fig,"string", "🔎+",'units','normalized','Position',[0.815 0.91 0.025 0.035],'fontsize',8,'callback',@Update_UI); %
-root.ZoomOut = uicontrol(root.Fig,"string", "🔎-",'units','normalized','Position',[0.845 0.91 0.025 0.035],'fontsize',8,'callback',@Update_UI); %
-root.CustomZoom = uicontrol(root.Fig,"string", "🏠📌🔁",'units','normalized','Position',[0.88 0.91 0.05 0.035],'fontsize',8,'callback',@Update_UI); %
-root.SetZoom = uicontrol(root.Fig,"string", "📌",'units','normalized','Position',[0.94 0.91 0.05 0.035],'fontsize',7,'callback',@Update_UI); %
+root.Home = uipushtool(root.T,"cdata", Home, 'tooltipstring', 'Zoom to original image size', 'clickedcallback',@Update_UI);
+root.ZoomModeOn = uipushtool(root.T,"cdata", Magni, 'tooltipstring', 'Enable Zoom', 'clickedcallback',@Update_UI);
+root.ZoomModeOff = uipushtool(root.T,"cdata", NoMagni, 'tooltipstring', 'Disable Zoom', 'clickedcallback',@Update_UI);
+root.ZoomIn = uipushtool(root.T,"cdata", ZoomIn, 'tooltipstring', 'Zoom in', 'clickedcallback',@Update_UI);
+root.ZoomOut = uipushtool(root.T,"cdata", ZoomOut, 'tooltipstring', 'Zoom out', 'clickedcallback',@Update_UI);
+root.SetCustomZoom = uipushtool(root.T,"cdata", Pin, 'tooltipstring', 'Pin desired zoom', 'clickedcallback',@Update_UI);
+root.CustomZoom = uipushtool(root.T,"cdata", PinHome, 'tooltipstring', 'Zoom to desired zoom', 'clickedcallback',@Update_UI);
+
 
 root.Process = uicontrol(root.Fig,'style','text','units','normalized','position',[0.0 0.0 0.05 0.025],'string',' Ready','backgroundcolor',[0.785 1 0.785],"horizontalalignment",'left','fontsize',7);
 
