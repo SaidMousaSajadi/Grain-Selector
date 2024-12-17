@@ -1,9 +1,9 @@
 # Grain Selector 2D
-By receiving the input image, Grain-Selector is able to analyze the shape with indices and is able to output the user's desired index as an image. The results of this software can be imported into [RPMG2D](https://github.com/yasharsajadi/RPMG2D) and [MRPMG2D](https://github.com/yasharsajadi/MRPMG2D) software.
+By receiving the input image, Grain-Selector is able to analyze the shape with indices and is able to output the user's desired index as an image. The results of this software can be imported into [RPMG2D](https://github.com/SaidMousaSajadi/RPMG2D) and [MRPMG2D](https://github.com/SaidMousaSajadi/MRPMG2D) software.
 Let's install it and work with it:
 
 <p align="center">
-  <img src="https://github.com/yasharsajadi/Grain-Selector/blob/master/A%20Sample.png" width="800">
+  <img src="https://github.com/SaidMousaSajadi/Grain-Selector/blob/master/A%20Sample.png" width="800">
 </p>
 
 
@@ -26,7 +26,7 @@ In Linux
 Create Shortcut From `MyApplication.sh` , and use it where you want.
 
 ## Manual
-[PDF](https://github.com/yasharsajadi/Grain-Selector/blob/master/GrainSelector/Manual.pdf)
+[PDF](https://github.com/SaidMousaSajadi/Grain-Selector/blob/master/GrainSelector/Manual.pdf)
 
 ## Tutorials
 [Youtube Video](https://www.youtube.com/watch?v=ijVbrcyl3nM)
