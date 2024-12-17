@@ -14,7 +14,7 @@ Let's install it and work with it:
 		" `.\Octave-7.3.0\mingw64\bin` "
 2. If you have git, clone the project in CMD, Terminal or PowerShell:
 	```
-	git clone https://github.com/yasharsajadi/Grain-Selector.git
+	git clone https://github.com/SaidMousaSajadi/Grain-Selector.git
 	```
 	Hint: If you want install [git](https://git-scm.com/downloads)
 3. Otherwise, download the project in this repository as a zip and extract it on your PC.
