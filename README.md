@@ -1,3 +1,12 @@
+## License
+
+This project is licensed under a custom **Academic Non-Commercial License (ANCL)**.
+
+📌 Use is permitted for **academic and research purposes only**.  
+🚫 **Commercial use is strictly prohibited** without prior written permission.  
+© 2025 [Said Mousa Sajadi and Elahe Shahrian]
+
+
 # Grain Selector 2D
 By receiving the input image, Grain-Selector is able to analyze the shape with indices and is able to output the user's desired index as an image. The results of this software can be imported into [RPMG2D](https://github.com/SaidMousaSajadi/RPMG2D) and [MRPMG2D](https://github.com/SaidMousaSajadi/MRPMG2D) software.
 Let's install it and work with it:
